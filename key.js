@@ -5,7 +5,7 @@ import createKeccakHash from "keccak";
 import Mnemonic from "bitcore-mnemonic";
 //import keccak from "keccak";
 
-function createPrivatekey() {
+function createPrivateKey() {
     let privateKey;
     do{
         privateKey = cryto.randomBytes(32);
@@ -15,7 +15,7 @@ function createPrivatekey() {
 
 //console.log(createPrivatekey().toString("hex"));
 
-function createPublickey(privateKey, compressed = false) {
+function createPublicKey(privateKey, compressed = false) {
     return Buffer.from(secp256k1.publicKeyCreate(privateKey, compressed));
 }
 
@@ -28,7 +28,7 @@ function createAddress(publicKey) {
 
 //메타 마스크 개인키 가나슈
 const privateKey = Buffer.from("E97FBC95588CCE7606F14B16F652FEFE7F35320A4311439499921228F8A3F783", "hex");
-const publicKey = createPublickey(privateKey);
+const publicKey = createPublicKey(privateKey);
 const address = createAddress(publicKey);
 // console.log(address);
 
@@ -66,7 +66,7 @@ function toChecksumAddress (address) {
 
 //2020.06.24 mnemonic
 function privateKeyToAddress(privateKey) {
-  const publicKey = createPublickey(privateKey);
+  const publicKey = createPublicKey(privateKey);
   const address = createAddress(publicKey);
   return toChecksumAddress(address);
 }
@@ -84,11 +84,21 @@ function mnemonicToPrivatekey(mnemonic) {
   return Buffer.from(privateKey.toString(), "hex");
 }
 
-const mnemonic = new Mnemonic("captain flock glide share argue interest acid arrange heavy rice trumpet range");
-console.log(mnemonic.toString());
+// const mnemonic = new Mnemonic("captain flock glide share argue interest acid arrange heavy rice trumpet range");
+// console.log(mnemonic.toString());
 
-const privatekey = mnemonicToPrivatekey(mnemonic);
-console.log(privatekey.toString("hex"));
+// const privatekey = mnemonicToPrivatekey(mnemonic);
+// console.log(privatekey.toString("hex"));
 
-const address0 = privateKeyToAddress(privateKey);
-console.log(address0);
+// const address0 = privateKeyToAddress(privateKey);
+// console.log(address0);
+
+export default {
+  createPrivateKey,
+  createPublicKey,
+  createAddress,
+  toChecksumAddress,
+  privateKeyToAddress,
+  createMnemonic,
+  mnemonicToPrivatekey,
+};
