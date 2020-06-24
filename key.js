@@ -2,6 +2,7 @@
 import cryto from "crypto";
 import secp256k1 from "secp256k1";
 import createKeccakHash from "keccak";
+import Mnemonic from "bitcore-mnemonic";
 //import keccak from "keccak";
 
 function createPrivatekey() {
@@ -25,18 +26,21 @@ function createAddress(publicKey) {
 // let 변수는 변경 가능
 // const 변수는 변경 불가 값
 
-// const privateKey = Buffer.from("E97FBC95588CCE7606F14B16F652FEFE7F35320A4311439499921228F8A3F783", "hex");
-// const publicKey = createPublickey(privateKey);
-// const address = createAddress(publicKey);
-// console.log(address);
-
-const privateKey = Buffer.from("000000000000000000000000000000000000000000000000000000000000270A", "hex");
+//메타 마스크 개인키 가나슈
+const privateKey = Buffer.from("E97FBC95588CCE7606F14B16F652FEFE7F35320A4311439499921228F8A3F783", "hex");
 const publicKey = createPublickey(privateKey);
 const address = createAddress(publicKey);
-const ChecksumAddress = toChecksumAddress(address);
+// console.log(address);
 
-console.log(address);
-console.log(ChecksumAddress);
+
+//임의 개인키
+// const privateKey = Buffer.from("000000000000000000000000000000000000000000000000000000000000270F", "hex");
+// const publicKey = createPublickey(privateKey);
+// const address = createAddress(publicKey);
+// const ChecksumAddress = toChecksumAddress(address);
+
+// console.log(address);
+// console.log(ChecksumAddress);
 
 
 // let privateKey = createPrivatekey();
@@ -59,3 +63,32 @@ function toChecksumAddress (address) {
 
   return ret
 }
+
+//2020.06.24 mnemonic
+function privateKeyToAddress(privateKey) {
+  const publicKey = createPublickey(privateKey);
+  const address = createAddress(publicKey);
+  return toChecksumAddress(address);
+}
+
+function createMnemonic(wordsCount = 12) {
+  if (wordsCount < 12 || wordsCount > 24 || wordsCount % 3 !== 0){
+    throw new Error("invalid number of words");
+  }
+  const entopy = (16 + (wordsCount - 12) / 3 * 4) * 8;
+  return new Mnemonic(entopy);
+}
+
+function mnemonicToPrivatekey(mnemonic) {
+  const privateKey = mnemonic.toHDPrivateKey().derive("m/44'/60'/0'/0/0").privateKey;
+  return Buffer.from(privateKey.toString(), "hex");
+}
+
+const mnemonic = new Mnemonic("captain flock glide share argue interest acid arrange heavy rice trumpet range");
+console.log(mnemonic.toString());
+
+const privatekey = mnemonicToPrivatekey(mnemonic);
+console.log(privatekey.toString("hex"));
+
+const address0 = privateKeyToAddress(privateKey);
+console.log(address0);
