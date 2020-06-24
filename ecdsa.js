@@ -46,20 +46,27 @@ function ethRecover(message, signature) {
 // const recoverKey = recover(message, signature);
 // console.log("recoveredKey:",recoverKey.toString("hex"));
 
-//이더리움 방식
-const privateKey = key.createPrivateKey();
-const address = key.privateKeyToAddress(privateKey);
-console.log("sender address:", address);
+// //이더리움 방식
+// const privateKey = key.createPrivateKey();
+// const address = key.privateKeyToAddress(privateKey);
+// console.log("sender address:", address);
 
-//web3 사용
-const web3 = new Web3();
-const account = web3.eth.accounts.privateKeyToAccount("0x" + privateKey.toString("hex"));
-console.log(account);
+// //web3 사용
+// const web3 = new Web3();
+// const account = web3.eth.accounts.privateKeyToAccount("0x" + privateKey.toString("hex"));
+// console.log(account);
 
-const signature = ethSign("Hello Blockchain", privateKey);
-// const recoveredAddress = ethRecover("Hello Blockchain", signature);
-// console.log("recovered address:", recoveredAddress);
-console.log(Buffer.from(signature.signature).toString("hex"));
-console.log(signature.recid);
+// const signature = ethSign("Hello Blockchain", privateKey);
+// // const recoveredAddress = ethRecover("Hello Blockchain", signature);
+// // console.log("recovered address:", recoveredAddress);
+// console.log(Buffer.from(signature.signature).toString("hex"));
+// console.log(signature.recid);
 
-console.log(account.sign("Hello Blockchain"));
+// console.log(account.sign("Hello Blockchain"));
+
+export default {
+    sign,
+    recover,
+    ethSign,
+    ethRecover,
+};
